@@ -1,5 +1,9 @@
 # progress-passthrough
 
+[![pipeline status](https://gitlab.com/smheidrich/progress-passthrough/badges/main/pipeline.svg?style=flat-square)](https://gitlab.com/smheidrich/progress-passthrough/-/commits/main)
+[![codecov](https://img.shields.io/codecov/c/gl/smheidrich/progress-passthrough?style=flat-square&token=TODO)](https://codecov.io/gl/smheidrich/progress-passthrough)
+[![docs](https://img.shields.io/badge/docs-online-brightgreen?style=flat-square)](https://smheidrich.gitlab.io/progress-passthrough/)
+
 Utilities to pass progress information through nesting levels.
 
 
