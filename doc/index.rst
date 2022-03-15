@@ -34,7 +34,7 @@ progress bar:
 .. code:: python
 
    from tqdm import tqdm
-   from progress_passthrough.iterator_wrappers import wrap_source_len
+   from progress_passthrough.iterator_wrappers import wrap_source
 
    r = range(1000000)
 
