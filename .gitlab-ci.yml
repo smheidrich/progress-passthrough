@@ -23,7 +23,7 @@ pytest:
     - pytest --cov=progress_passthrough
   artifacts:
     paths:
-      - .coveragerc
+      - .coverage
 
 upload_coverage:
   stage: deploy
