@@ -20,16 +20,27 @@ pytest:
       - IMAGE: ['python:3.6', 'python:3.10']
   image: $IMAGE
   script:
-  - pytest --cov=progress_passthrough
-  after_script:
-  - bash <(curl -s https://codecov.io/bash)
+    - pytest --cov=progress_passthrough
+  artifacts:
+    paths:
+      - .coveragerc
+
+upload_coverage:
+  stage: deploy
+  rules:
+    # only run this on main so we can keep the upload token protected
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - curl -Os https://uploader.codecov.io/latest/linux/codecov
+    - chmod +x codecov
+    - ./codecov
 
 pages:
   stage: deploy
   script:
-  - (cd doc && make html); mv doc/_build/html public
+    - (cd doc && make html); mv doc/_build/html public
   artifacts:
     paths:
-    - public
+      - public
   only:
-  - main
+    - main
