@@ -20,10 +20,10 @@ pytest:
       - IMAGE: ['python:3.9', 'python:3.10']
   image: $IMAGE
   script:
-    - pytest --cov=progress_passthrough
+    - pytest --cov-report=xml --cov=progress_passthrough
   artifacts:
     paths:
-      - .coverage
+      - coverage.xml
 
 upload_coverage:
   stage: deploy
