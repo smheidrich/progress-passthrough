@@ -63,15 +63,18 @@ source_preserving_r = wrap_source(r)
 # construct a generator and wrap it so that the original iterable (r) can
 # still be accessed
 filtering_gen = source_preserving_r.wrap(
-   x for x in source_preserving_r if x % 31337 == 0
+   x for x in source_preserving_r if x % 37 == 0
 )
 
 # attach a callback which updates tqdm on each iteration of r to one of the
-# inner wrappers around it
+# inner wrappers around it, then iterate
 with tqdm(total=len(filtering_gen.source)) as t:
  filtering_gen.source.callbacks.append(t.update)
  results = list(filtering_gen)
 ```
+
+For more examples and the full API documentation, refer to the
+[documentation](https://smheidrich.gitlab.io/progress-passthrough/).
 
 
 ## Installation

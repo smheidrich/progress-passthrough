@@ -68,14 +68,36 @@ user down to a specific progress bar:
    # construct a generator and wrap it so that the original iterable (r) can
    # still be accessed
    filtering_gen = source_preserving_r.wrap(
-       x for x in source_preserving_r if x % 31337 == 0
+       x for x in source_preserving_r if x % 37 == 0
    )
 
    # attach a callback which updates tqdm on each iteration of r to one of the
-   # inner wrappers around it
+   # inner wrappers around it, then iterate
    with tqdm(total=len(filtering_gen.source)) as t:
      filtering_gen.source.callbacks.append(t.update)
      results = list(filtering_gen)
+
+While this all works independently of the specific progress bar library used,
+this package comes with a few convenient classes for tqdm specifically
+(available after installing the ``tqdm`` extra, see :ref:`Progress bar specific
+extras`) that let us not have to worry about setting up the callback:
+
+.. code:: python
+
+   from progress_passthrough.tqdm import TqdmOnSource
+
+   # same setup as above
+   r = slow_range(100)
+   source_preserving_r = wrap_source(r)
+   filtering_gen = source_preserving_r.wrap(
+       x for x in source_preserving_r if x % 37 == 0
+   )
+
+   # let library set up the source callback (returns instance of tqdm subclass)
+   t = TqdmOnSource(filtering_gen)
+
+   # perform iteration
+   results = list(t)
 
 .. invisible-code-block: python
 
