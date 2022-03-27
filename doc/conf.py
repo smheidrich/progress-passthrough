@@ -81,4 +81,4 @@ intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
 
 # -- Cross-referencing defaults ----------------------------------------------
 
-# default_role = 'any'
+default_role = 'py:obj'

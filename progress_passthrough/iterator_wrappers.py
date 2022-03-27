@@ -1,3 +1,8 @@
+"""
+Iterator wrappers that add features but pass iteration requests through.
+
+The core of this library.
+"""
 from collections.abc import Iterable, Callable
 
 
@@ -65,7 +70,7 @@ class SourcePreservingIterator(IteratorWrapper):
 
     def wrap(self, wrapped: Iterable):
         """
-        Wrap another iterable in a SourcePreservingIterator with the same
+        Wrap another iterable in a `~.SourcePreservingIterator` with the same
         source.
         """
         pt = self.__class__(wrapped, source=self.source)
@@ -80,11 +85,11 @@ class SourcePreservingIterator(IteratorWrapper):
 
 def wrap_source(wrapped: Iterable):
     """
-    Conveniently apply SourcePreservingIterator and CallbackIterator.
+    Conveniently apply `~.SourcePreservingIterator` and `~.CallbackIterator`.
 
-    First wraps the iterator in a CallbackIterator and then wraps that in a
-    SourcePreservingIterator. The CallbackIterator is set as the source so
-    users can attach callbacks.
+    First wraps the iterator in a `~.CallbackIterator` and then wraps that in a
+    `~.SourcePreservingIterator`. The `~.CallbackIterator` is set as the source
+    so users can attach callbacks.
     """
     cbi = CallbackIterator(wrapped)
     spi = SourcePreservingIterator(cbi, source=cbi)
@@ -95,7 +100,7 @@ def wrap_source_len(wrapped: Iterable, length):
     """
     Same as wrap_source but also attach a length.
 
-    The AttachedLengthIterator will be the innermost wrapper around the
+    The `~.AttachedLengthIterator` will be the innermost wrapper around the
     supplied iterator.
     """
     ali = AttachedLengthIterator(wrapped, length)
