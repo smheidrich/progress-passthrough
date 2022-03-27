@@ -5,7 +5,9 @@ Requires the `tqdm` extra to be installed.
 """
 # ensure extra is installed
 from pkg_resources import require
+
 require("progress_passthrough[tqdm]")
+# /
 
 from collections import ChainMap
 from collections.abc import Iterable
@@ -21,6 +23,7 @@ class TqdmOnSource(_tqdm):
     """
     tqdm subclass that uses the iterator's source for progress information.
     """
+
     def __init__(
         self, iterable: Optional[SourcePreservingIterator] = None, **kwargs
     ):
@@ -38,6 +41,7 @@ class TqdmPreferablyOnSource(_tqdm):
     Falls back to using the iterator itself if it doesn't have source
     information (i.e., is not a `~.SourcePreservingIterator` instance).
     """
+
     def __init__(
         self,
         iterable: Optional[Union[SourcePreservingIterator, Iterable]] = None,
