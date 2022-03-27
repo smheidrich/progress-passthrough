@@ -1,5 +1,3 @@
-<img src="./doc/_static/logo.svg" alt="logo" width="128" height="128">
-
 # progress-passthrough
 
 [![pipeline status](https://gitlab.com/smheidrich/progress-passthrough/badges/main/pipeline.svg?style=flat-square)](https://gitlab.com/smheidrich/progress-passthrough/-/commits/main)
