@@ -10,10 +10,9 @@ Utilities to pass progress information through nested iterators.
 ## Example
 
 The use case which inspired this is using progress bars like
-`tqdm <https://github.com/tqdm/tqdm>`_ on "filtering generators" (think ``(x
-for x in l if some_condition(x))``) and wanting the progress to follow the
-iteration over the inner (unfiltered) iterable instead of the filtered
-iterations.
+[tqdm](https://github.com/tqdm/tqdm>) on "filtering generators" (think `(x for
+x in l if some_condition(x))`) and wanting the progress to follow the iteration
+over the inner (unfiltered) iterable instead of the filtered iterations.
 
 Consider e.g.:
 
@@ -47,7 +46,7 @@ results = list(tqdm(filtering_gen))
 This a) doesn't produce a progress bar because the length of the generator
 output isn't known and b) even if it did, it would be choppier than it needs to
 be because only filtered iterations move the bar, not iterations of the
-original source iterable (``r``).
+original source iterable (`r`).
 
 This library allows solving the issue in a generic manner that does not tie the
 user down to a specific progress bar:
