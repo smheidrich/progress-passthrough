@@ -2,6 +2,8 @@ from progress_passthrough.iterator_wrappers import (
     IteratorWrapper,
     AttachedLengthIterator,
     CallbackIterator,
+    wrap_source,
+    wrap_source_len,
 )
 from unittest.mock import Mock
 
@@ -43,5 +45,30 @@ def test_callback_iterator_on_iterator():
     w = CallbackIterator(inner_it)
     w.callbacks.append(mock_cb)
     outer_it = (x for x in w if x % 2 == 0)
+    assert list(outer_it) == [0, 2, 4, 6, 8]
+    assert mock_cb.call_count == 10
+
+
+# test convenience functions
+
+
+def test_wrap_source():
+    mock_cb = Mock()
+    inner_it = range(10)
+    w = wrap_source(inner_it)
+    w.source.callbacks.append(mock_cb)
+    outer_it = w(x for x in w if x % 2 == 0)
+    assert len(w.source) == 10
+    assert list(outer_it) == [0, 2, 4, 6, 8]
+    assert mock_cb.call_count == 10
+
+
+def test_wrap_source_len():
+    mock_cb = Mock()
+    inner_it = (x for x in range(10))
+    w = wrap_source_len(inner_it, 10)
+    w.source.callbacks.append(mock_cb)
+    outer_it = w(x for x in w if x % 2 == 0)
+    assert len(w.source) == 10
     assert list(outer_it) == [0, 2, 4, 6, 8]
     assert mock_cb.call_count == 10

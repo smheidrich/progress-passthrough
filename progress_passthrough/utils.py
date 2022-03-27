@@ -1,3 +1,6 @@
+"""
+Utilities that may come in handy when using this library.
+"""
 from typing import Optional
 from functools import singledispatch
 

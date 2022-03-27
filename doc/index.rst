@@ -59,11 +59,11 @@ Table of contents
 -----------------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
    installation
-   api
+   api/index
 
 
 Indices and tables
