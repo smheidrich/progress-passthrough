@@ -15,13 +15,17 @@ from typing import Optional, Union
 
 from tqdm import tqdm as _tqdm
 
-from .iterator_wrappers import SourcePreservingIterator
+from .iterator_wrappers import CallbackIterator, SourcePreservingIterator
 from .utils import optional_len
 
 
 class TqdmOnSource(_tqdm):
     """
-    tqdm subclass that uses the iterator's source for progress information.
+    tqdm subclass that uses the iterable's source for progress information.
+
+    The given iterable must be a `~.SourcePreservingIterator` wrapping a
+    `~.CallbackIterator`. A convenient way to obtain this structure is to use
+    `~.wrap_source`.
     """
 
     def __init__(
@@ -36,10 +40,11 @@ class TqdmOnSource(_tqdm):
 
 class TqdmPreferablyOnSource(_tqdm):
     """
-    tqdm subclass that uses the iterator's source progress if available.
+    tqdm subclass that uses the iterable's source progress if available.
 
-    Falls back to using the iterator itself if it doesn't have source
-    information (i.e., is not a `~.SourcePreservingIterator` instance).
+    Falls back to using the iterator itself if it doesn't have a source
+    with an attachable callback (i.e., is not a `~.SourcePreservingIterator`
+    instance wrapping a `~.CallbackIterator`).
     """
 
     def __init__(
@@ -47,12 +52,17 @@ class TqdmPreferablyOnSource(_tqdm):
         iterable: Optional[Union[SourcePreservingIterator, Iterable]] = None,
         **kwargs
     ):
-        if isinstance(iterable, SourcePreservingIterator):
+        if isinstance(iterable, SourcePreservingIterator) and isinstance(
+            iterable.source, CallbackIterator
+        ):
             kwargs = _tqdm_kwargs_for_source(iterable, **kwargs)
         super().__init__(iterable=iterable, **kwargs)
 
     def __iter__(self):
-        if isinstance(self.iterable, SourcePreservingIterator):
+        iterable = self.iterable
+        if isinstance(iterable, SourcePreservingIterator) and isinstance(
+            iterable.source, CallbackIterator
+        ):
             return _tqdm_iter_for_source(self)
         else:
             return super().__iter__()
@@ -69,7 +79,8 @@ def _tqdm_kwargs_for_source(
 
 def _tqdm_iter_for_source(tqdm_instance):
     iterable: SourcePreservingIterator = tqdm_instance.iterable
+    source: CallbackIterator = iterable.source
     with tqdm_instance as t:
-        iterable.source.callbacks.append(lambda *a, **kw: t.update())
+        source.callbacks.append(lambda *a, **kw: t.update())
         for i, x in enumerate(iterable):
             yield x
