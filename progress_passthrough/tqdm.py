@@ -40,9 +40,9 @@ class TqdmOnSource(_tqdm):
 
 class TqdmPreferablyOnSource(_tqdm):
     """
-    tqdm subclass that uses the iterable's source progress if available.
+    Like `~.TqdmOnSource` but falls back to default tqdm if there is no source.
 
-    Falls back to using the iterator itself if it doesn't have a source
+    Falls back to using the iterable itself if it doesn't have a source
     with an attachable callback (i.e., is not a `~.SourcePreservingIterator`
     instance wrapping a `~.CallbackIterator`).
     """
