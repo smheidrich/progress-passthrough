@@ -1,4 +1,4 @@
-![logo](https://smheidrich.gitlab.io/progress-passthrough/_static/logo.svg)
+<img src="./doc/_static/logo.svg" alt="logo" width="128" height="128">
 
 # progress-passthrough
 
