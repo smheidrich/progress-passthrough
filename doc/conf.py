@@ -56,12 +56,12 @@ html_theme = 'alabaster'
 # Options for theme
 html_theme_options = {
   'page_width': '1080px',
-  # 'logo': 'logo.png',
-  # 'logo_name': True,
-  # 'logo_text_align': 'center',
+  'logo': 'logo.svg',
+  'logo_name': True,
+  'logo_text_align': 'center',
 }
 
-html_favicon = '_static/favicon.png'
+html_favicon = '_static/favicon.svg'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
