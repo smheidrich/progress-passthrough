@@ -1,60 +1,79 @@
+![logo](https://smheidrich.gitlab.io/progress-passthrough/_static/logo.svg)
+
 # progress-passthrough
 
 [![pipeline status](https://gitlab.com/smheidrich/progress-passthrough/badges/main/pipeline.svg?style=flat-square)](https://gitlab.com/smheidrich/progress-passthrough/-/commits/main)
 [![codecov](https://codecov.io/gl/smheidrich/progress-passthrough/branch/main/graph/badge.svg?token=GBYVO057JT)](https://codecov.io/gl/smheidrich/progress-passthrough)
 [![docs](https://img.shields.io/badge/docs-online-brightgreen?style=flat-square)](https://smheidrich.gitlab.io/progress-passthrough/)
 
-Utilities to pass progress information through nesting levels.
+Utilities to pass progress information through nested iterators.
 
 
 ## Example
 
 The use case which inspired this is using progress bars like
-[`tqdm`](https://github.com/tqdm/tqdm) on filtering generators but wanting the
-bar to progress as determined by the original iterable the generator iterates
-over.
+`tqdm <https://github.com/tqdm/tqdm>`_ on "filtering generators" (think ``(x
+for x in l if some_condition(x))``) and wanting the progress to follow the
+iteration over the inner (unfiltered) iterable instead of the filtered
+iterations.
 
 Consider e.g.:
 
 ```python
+from dataclasses import dataclass
+from time import sleep
 from tqdm import tqdm
 
-r = range(1000000)
+@dataclass
+class slow_range:
+  """
+  Range with simulated delay so progress bar doesn't fill up instantly.
+  """
+  n: int
 
-filtering_gen = (x for x in r if x % 31337 == 0)
+  def __iter__(self):
+     for x in range(self.n):
+        sleep(0.01)
+        yield x
 
-# this a) doesn't produce a progress bar because the length of the generator
-# isn't known and b) even if it did, it would be choppier than it needs to be
-# because only result iterations move the bar, not iterations of the original
-# source iterable (r)
+  def __len__(self):
+     return self.n
+
+r = slow_range(100)
+
+filtering_gen = (x for x in r if x % 37 == 0)
+
 results = list(tqdm(filtering_gen))
 ```
 
-With the help of this library, the issue can be resolved by the author of the
-generator in a generic manner that does not tie the user down to a specific
-progress bar:
+This a) doesn't produce a progress bar because the length of the generator
+output isn't known and b) even if it did, it would be choppier than it needs to
+be because only filtered iterations move the bar, not iterations of the
+original source iterable (``r``).
+
+This library allows solving the issue in a generic manner that does not tie the
+user down to a specific progress bar:
 
 ```python
-from tqdm import tqdm
 from progress_passthrough.iterator_wrappers import wrap_source
 
-r = range(1000000)
+r = slow_range(100)
 
-# wrap r in a wrapper that in turn allows wrapping generators involving it in
-# wrappers by which one can access it (r) and also allows attaching callbacks
-# to be run on each iteration:
+# wrap r in several wrappers that together provide the functionality of this
+# library (see below)
 source_preserving_r = wrap_source(r)
 
-# construct a generator making use of the aforementioned functionality
+# construct a generator and wrap it so that the original iterable (r) can
+# still be accessed
 filtering_gen = source_preserving_r.wrap(
-    x for x in source_preserving_r if x % 31337 == 0
+   x for x in source_preserving_r if x % 31337 == 0
 )
 
-# use the callback functionality to update tqdm progress on each iteration of
-# the original source iterable (r)
+# attach a callback which updates tqdm on each iteration of r to one of the
+# inner wrappers around it
 with tqdm(total=len(filtering_gen.source)) as t:
-  filtering_gen.source.callbacks.append(t.update)
-  results = list(filtering_gen)
+ filtering_gen.source.callbacks.append(t.update)
+ results = list(filtering_gen)
 ```
 
 
