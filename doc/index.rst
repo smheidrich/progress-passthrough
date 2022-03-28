@@ -11,8 +11,11 @@ The use case which inspired this is using progress bars like
 for x in l if some_condition(x))``) and wanting the progress to follow the
 iteration over the inner (unfiltered) iterable instead of the filtered
 iterations.
+Simply putting the ``tqdm`` call at the innermost level in such situations is
+not always an option, e.g. if it's meant to be core application logic and
+should therefore be interface-independent.
 
-Consider e.g.:
+As a minimal example, consider e.g.:
 
 .. invisible-code-block: python
 
