@@ -20,24 +20,9 @@ should therefore be interface-independent.
 As a minimal example, consider e.g.:
 
 ```python
-from dataclasses import dataclass
-from time import sleep
 from tqdm import tqdm
-
-@dataclass
-class slow_range:
-  """
-  Range with simulated delay so progress bar doesn't fill up instantly.
-  """
-  n: int
-
-  def __iter__(self):
-     for x in range(self.n):
-        sleep(0.01)
-        yield x
-
-  def __len__(self):
-     return self.n
+# range with simulated delay so progress bar doesn't fill up instantly
+from progress_passthrough.demo_utils import slow_range
 
 r = slow_range(100)
 

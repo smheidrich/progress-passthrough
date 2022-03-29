@@ -25,24 +25,15 @@ As a minimal example, consider e.g.:
 
 .. code:: python
 
-   from dataclasses import dataclass
-   from time import sleep
    from tqdm import tqdm
+   # range with simulated delay so progress bar doesn't fill up instantly
+   from progress_passthrough.demo_utils import slow_range
 
-   @dataclass
-   class slow_range:
-      """
-      Range with simulated delay so progress bar doesn't fill up instantly.
-      """
-      n: int
+   r = slow_range(100)
 
-      def __iter__(self):
-         for x in range(self.n):
-            sleep(0.01)
-            yield x
+   filtering_gen = (x for x in r if x % 37 == 0)
 
-      def __len__(self):
-         return self.n
+   results = list(tqdm(filtering_gen))
 
    r = slow_range(100)
 
