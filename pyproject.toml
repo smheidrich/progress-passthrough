@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "progress-passthrough"
-version = "0.1.0"
+version = "0.1.1"
 description = "Utilities to pass progress information through nesting levels"
 authors = ["smheidrich <smheidrich@weltenfunktion.de>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-setuptools = "^61.1.1"
+setuptools = ">=59"
 tqdm = {version = "^4.63.0", optional = true}
 
 [tool.poetry.dev-dependencies]
