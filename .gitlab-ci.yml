@@ -17,7 +17,7 @@ pytest:
   stage: test
   parallel:
     matrix:
-      - IMAGE: ['python:3.9', 'python:3.10']
+      - IMAGE: ["python:3.9", "python:3.10"]
   image: $IMAGE
   script:
     - pytest --cov-report=xml --cov=progress_passthrough
