@@ -10,6 +10,15 @@ To install the latest version directly from the repository:
 
   pip install git+https://gitlab.com/smheidrich/progress-passthrough.git
 
+Via PyPI
+--------
+
+To install the latest version from PyPI:
+
+.. code:: bash
+
+  pip install progress-passthrough
+
 
 Progress bar specific extras
 ----------------------------
