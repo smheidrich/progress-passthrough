@@ -1,7 +1,7 @@
 image: "python:3.10"
 
 variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
 
 cache:
   paths:
@@ -17,7 +17,7 @@ pytest:
   stage: test
   parallel:
     matrix:
-      - IMAGE: ['python:3.9', 'python:3.10']
+      - IMAGE: ["python:3.9", "python:3.10"]
   image: $IMAGE
   script:
     - pytest --cov-report=xml --cov=progress_passthrough
